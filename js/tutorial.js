@@ -151,7 +151,7 @@
                             "<div class='tutorial__footer'>" +
                                 "<span>" + (index + 1) + " / " + length + "</span>" +
                                 "<button>" +
-                                    ((index + 1) < length ? "<svg style='width:24px;height:24px' viewBox='0 0 24 24'><path fill='#fff' d='M8,5.14V19.14L19,12.14L8,5.14Z' /></svg>" : "<svg style='width:24px;height:24px' viewBox='0 0 24 24'><path fill='#fff' d='M18,18H6V6H18V18Z' /></svg>") +
+                                    ((index + 1) < length ? "<svg style='width:1.2em;height:1.2em' viewBox='0 0 24 24'><path fill='#fff' d='M8,5.14V19.14L19,12.14L8,5.14Z' /></svg>" : "<svg style='width:1.2em;height:1.2em' viewBox='0 0 24 24'><path fill='#fff' d='M18,18H6V6H18V18Z' /></svg>") +
                                 "</button>" +                            
                             "</div>" +
                        "</div>";
