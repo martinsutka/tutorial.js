@@ -150,37 +150,44 @@
     .tutorial__footer {
         display: flex;
         margin-top: 1rem;
+        align-items: center;
+        height: 2rem;
 
         > span {
             font-weight: 700;
             flex: 1;
             opacity: .5;
-            line-height: 1.85rem;
+            line-height: 2rem;
         }
 
         > button,
         > button:active,
         > button:focus {
             height: 2rem;
-            padding: 0 .5rem;
-            transform: translate(1rem,0);
-            background: transparent;
+            width: 2rem;
+            transform: translate(.5rem,0);
+            display: inline-block;
+            font-family: initial;
+            border: none;
+            padding: 0;
+            margin-left: 1rem;
+            text-decoration: none;
+            background: inherit;
+            color: inherit;
+            cursor: pointer;
+            text-align: center;
+            transition: background 250ms ease-in-out, 
+                        transform 150ms ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;   
+            display: flex;
+            justify-content: center;   
+            opacity: .5;
+            transition: all 0.3s ease;      
         }
 
-        > button {
-            > i {
-                font-size: 2rem;
-                line-height: 1rem;
-                color: @tip-color;
-                opacity: .5;
-                transition: all 0.3s ease;
-            }
-
-            &:hover {
-                > i {
-                    opacity: 1;
-                }
-            }
+        > button:hover {
+            opacity: 1;
         }
     }    
 }
