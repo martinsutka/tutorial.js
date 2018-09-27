@@ -23,7 +23,9 @@ module.exports = function (grunt) {
         csslint: {
             options: {
                 "order-alphabetical": false,
-                "fallback-colors": false
+                "fallback-colors": false,
+                "adjoining-classes": false,
+                "box-model": false
             },
             src: [
                 "wwwroot/css/**/*.css",
