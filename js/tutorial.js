@@ -18,6 +18,59 @@
     //#region [ Methods : Private ]
 
     /**
+     * Adds className to the element class list.
+     * 
+     * @param {HTMLElement} el Target element.
+     * @param {string} className Css class name.
+     */
+    function _addClass(el, className) {
+        if (el.classList) {
+            el.classList.add(className);
+        }
+        else {
+            el.className += " " + className;
+        }
+    }
+
+
+    /**
+     * Removes className from the element class list.
+     * 
+     * @param {HTMLElement} el Target element.
+     * @param {string} className Css class name.
+     */
+    function _removeClass(el, className) {
+        if (el.classList) {
+            el.classList.remove(className);
+        }
+        else {
+            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
+    }
+
+
+    /**
+     * Gets element height.
+     * 
+     * @param {HTMLElement} el Target element.
+     */
+    function _getHeight(el) {
+        var style = getComputedStyle(el);
+        return parseInt(style.height);        
+    }
+
+    /**
+     * Gets element width.
+     * 
+     * @param {HTMLElement} el Target element.
+     */
+    function _getWidth(el) {
+        var style = getComputedStyle(el);
+        return parseInt(style.width);        
+    }
+
+
+    /**
      * Creates container element and appends it to the body.
      * 
      * @returns {HTMLElement} Container element.
@@ -33,6 +86,23 @@
 
 
     /**
+     * Gets the element position and size.
+     * 
+     * @param {HTMLElement} el Target element.
+     * @returns {object} Element's position and size.
+     */
+    function _getPosition(el) {
+        var rect = el.getBoundingClientRect();
+        return {
+            t: rect.top + doc.body.scrollTop,
+            l: rect.left + doc.body.scrollLeft,
+            w: el.offsetWidth,
+            h: el.offsetHeight
+        };
+    }
+
+
+    /**
      * Creates pulse element.
      * 
      * @param {HTMLElement} target Target html element.
@@ -40,11 +110,7 @@
      * @returns {HTMLElement} Pulse element.
      */
     function _createPulse(target, container) {
-        var rect = target.getBoundingClientRect();
-        var t = rect.top + doc.body.scrollTop;
-        var l = rect.left + doc.body.scrollLeft;
-        var w = target.offsetWidth;
-        var h = target.offsetHeight;
+        var pos = _getPosition(target);
         
         // Create element
         var el = doc.createElement("div");
@@ -52,15 +118,80 @@
         el.innerHTML = "<div></div><div></div><div></div><div></div>";
 
         // Set it's style
-        el.style.width = w + "px";
-        el.style.height = h + "px";
-        el.style.top = t + "px";
-        el.style.left = l + "px";
+        el.style.width = pos.w + "px";
+        el.style.height = pos.h + "px";
+        el.style.top = pos.t + "px";
+        el.style.left = pos.l + "px";
 
         container.appendChild(el);
 
         return el;
     }    
+
+
+    /**
+     * Creates tip element.
+     * 
+     * @param {HTMLElement} target Target html element.
+     * @param {HTMLElement} container Tutorial container element.
+     * @param {string} position Position of the tooltip.
+     * @param {number} index Index of the current step.
+     * @param {number} length Number of steps.
+     * @param {function} callback Callback which initialised.
+     * @returns {HTMLElement} Pulse element.
+     */    
+    function _createTip(target, container, html, position, index, length, callback) {
+        var pos = _getPosition(target);
+
+        // Create element
+        var el = doc.createElement("div");
+        el.className = "tutorial__tip";
+        el.innerHTML = "<div>" +
+                            html +
+                            "<div class='tutorial__footer'>" +
+                                "<span>" + (index + 1) + " / " + length + "</span>" +
+                                "<button>" +
+                                    ((index + 1) < length ? "play_arrow" : "stop")+
+                                "</button>" +                            
+                            "</div>" +
+                       "</div>";
+
+        container.appendChild(el);
+
+        // Attach the callback to the button
+        el.querySelector(".tutorial__footer > button").addEventListener("click", callback);
+
+        // Set the position
+        switch (position) {
+            case "top":
+                el.style.top = (pos.t - _getHeight(el)) + "px";
+                el.style.left = (pos.l + (pos.w / 2)) + "px";
+                _addClass(el, "tutorial__tip--top");
+                break;
+            case "right":
+                el.style.top = pos.t + (pos.h / 2) + "px";
+                el.style.left = (pos.l + pos.w) + "px";
+                _addClass(el, "tutorial__tip--right");
+                break;
+            case "bottom":
+                el.style.top = (pos.t + pos.h) + "px";
+                el.style.left = pos.l + (pos.w / 2) + "px";
+                _addClass(el, "tutorial__tip--bottom");        
+                break;
+            case "left":
+                el.style.top = pos.t + (pos.h / 2) + "px";
+                el.style.left = (pos.l - _getWidth(el)) + "px";
+                _addClass(el, "tutorial__tip--left");        
+                break;
+        }
+
+        // Show the tip on the screen, just after a little while
+        setTimeout(function () {
+            _addClass(el, "tutorial__tip--visible");
+        }, 100);
+
+        return el;
+    }
 
     
     /**
@@ -87,25 +218,42 @@
             step.onCreate.apply(scope, [step, result]);
         }
 
-        // var deferred = $.Deferred();
         // var target = $(step.target);
         var target = doc.querySelector(step.target);
         if(!target) {
             throw "Target for the step '" + index + "' was not found.";
         }
-        // var pulse = $this._createPulse(target);
-        var pulse = _createPulse(target, scope.container);
-        // var tip = $this._createTip(target, step.html, step.position, i, steps.length, step.onNext.bind(scope, deferred));
-        // var next = $this._createStep.bind(null, i + 1, steps, dfr, scope);
+        
+        var html = step.html || "";
+        var position = step.position || "right";
+        var len = steps.length;
+        var onNext = step.onNext || function(nextStep, r) { r(); };
 
-        // deferred.promise().then(function (r) {
-        //     tip.removeClass("tutorial__tip--visible");
-        //     setTimeout(function () {
-        //         pulse.remove();
-        //         tip.remove();
-        //         next(r);
-        //     }, 300);
-        // });
+        // Create pulse element
+        var pulse = _createPulse(target, scope.container);
+
+        // Create tip an its promise
+        var tip;
+        var deferred = new Promise(function(resolve) {
+            tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, steps[index + 1], resolve));
+        });
+        
+        // Create handler for the next step creation
+        var next = _createStep.bind(scope, index + 1, steps, resolve, scope);
+
+        // When the promise is resolved go to next step
+        deferred.then(function(r) {
+            var handler = function() {
+                tip.removeEventListener("transitionend", handler);
+                pulse.parentNode.removeChild(pulse);
+                tip.parentNode.removeChild(tip);
+                deferred = null;
+                next(r);
+            };
+            // It's based on the fact that the tip is displayed using transition
+            tip.addEventListener("transitionend", handler); 
+            _removeClass(tip, "tutorial__tip--visible");
+        });
     }
 
     //#endregion
