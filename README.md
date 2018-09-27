@@ -1,3 +1,3 @@
 # tutorial.js
 
-Step-by-step feature introduction for the web sites.
+The best step-by-step feature introduction for your web sites, that's a promise! 
