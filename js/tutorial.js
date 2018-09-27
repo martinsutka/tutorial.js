@@ -31,6 +31,37 @@
         return el;
     }
 
+
+    /**
+     * Creates pulse element.
+     * 
+     * @param {HTMLElement} target Target html element.
+     * @param {HTMLElement} container Tutorial container element.
+     * @returns {HTMLElement} Pulse element.
+     */
+    function _createPulse(target, container) {
+        var rect = target.getBoundingClientRect();
+        var t = rect.top + doc.body.scrollTop;
+        var l = rect.left + doc.body.scrollLeft;
+        var w = target.offsetWidth;
+        var h = target.offsetHeight;
+        
+        // Create element
+        var el = doc.createElement("div");
+        el.className = "tutorial__pulse";
+        el.innerHTML = "<div></div><div></div><div></div><div></div>";
+
+        // Set it's style
+        el.style.width = w + "px";
+        el.style.height = h + "px";
+        el.style.top = t + "px";
+        el.style.left = l + "px";
+
+        container.appendChild(el);
+
+        return el;
+    }    
+
     
     /**
      * Creates new step.
@@ -56,15 +87,14 @@
             step.onCreate.apply(scope, [step, result]);
         }
 
-
+        // var deferred = $.Deferred();
         // var target = $(step.target);
         var target = doc.querySelector(step.target);
         if(!target) {
             throw "Target for the step '" + index + "' was not found.";
         }
-
-        // var deferred = $.Deferred();
         // var pulse = $this._createPulse(target);
+        var pulse = _createPulse(target, scope.container);
         // var tip = $this._createTip(target, step.html, step.position, i, steps.length, step.onNext.bind(scope, deferred));
         // var next = $this._createStep.bind(null, i + 1, steps, dfr, scope);
 
