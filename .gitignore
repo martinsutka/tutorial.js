@@ -1,1 +1,5 @@
 /node_modules
+wwwroot/js/tutorial.js
+wwwroot/js/tutorial.min.js
+wwwroot/css/tutorial.css
+wwwroot/css/tutorial.min.css
