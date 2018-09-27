@@ -31,6 +31,53 @@
         return el;
     }
 
+    
+    /**
+     * Creates new step.
+     * 
+     * @param {number} index Index of the current tutorial step.
+     * @param {array} steps Array of tutorial steps.
+     * @param {function} resolve Function to resolve the main promise.
+     * @param {object} scope Scope for the next callback function
+     * @param {any} result Result of the previous step.
+     */
+    function _createStep(index, steps, resolve, scope, result) {
+        // Finish with the last step
+        if (index >= steps.length) {
+            resolve();
+            return;
+        }
+
+        // Get the current step
+        var step = steps[index];
+
+        // Call the onCreate callback if specified
+        if (typeof (step.onCreate) === "function") {
+            step.onCreate.apply(scope, [step, result]);
+        }
+
+
+        // var target = $(step.target);
+        var target = doc.querySelector(step.target);
+        if(!target) {
+            throw "Target for the step '" + index + "' was not found.";
+        }
+
+        // var deferred = $.Deferred();
+        // var pulse = $this._createPulse(target);
+        // var tip = $this._createTip(target, step.html, step.position, i, steps.length, step.onNext.bind(scope, deferred));
+        // var next = $this._createStep.bind(null, i + 1, steps, dfr, scope);
+
+        // deferred.promise().then(function (r) {
+        //     tip.removeClass("tutorial__tip--visible");
+        //     setTimeout(function () {
+        //         pulse.remove();
+        //         tip.remove();
+        //         next(r);
+        //     }, 300);
+        // });
+    }
+
     //#endregion
 
 
@@ -98,7 +145,7 @@
         this.promise = new Promise(function(resolve) {
             $this._onEscapeHandler = _onEscape.bind($this, resolve);
             doc.addEventListener("keydown", $this._onEscapeHandler);
-            // $this._createStep(0, t.steps, dfr, t.scope);
+            _createStep(0, $this.steps, resolve, $this);
         });
 
         // Clean things when the tutorial ends
