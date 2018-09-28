@@ -6,10 +6,21 @@
     <title>toturial.js</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" />
     <link href="wwwroot/css/tutorial.css" rel="stylesheet" />
     <style>
         .icon-block .material-icons {
             font-size: inherit;
+        }
+
+        pre {
+            border-radius: 3px;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+        }
+
+        pre code {
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -83,11 +94,37 @@
             </div>
         </div>
     </div>
+    <br>
+    <br>
+    <div class="purple lighten-1 white-text">
+        <div class="container">
+            <div class="section">
+                <div class="row">
+                    <div class="col">
+                        <h4>How to use it</h4>
+                        <p>
+                            <b>tutorial.js</b> can be added your website in three simple steps:
+                        </p>
+                        <ol>
+                            <li>
+                                Include <b><code>tutorial.js</code></b> and <b><code>tutorial.css</code></b> (or the minified versions for production) in your page.
+                                <pre><code class="html">&lt;link href="/path/to/styles/tutorial.min.css" rel="stylesheet" /&gt;
+&lt;script src="/path/to/tutorial.min.js"&gt;&lt;/script&gt;</code></pre>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="wwwroot/js/tutorial.js"></script>
     <script>
+        hljs.initHighlightingOnLoad();
+
         $(function() {
             $("#demo1").click(function() {
                 tutorial([{
