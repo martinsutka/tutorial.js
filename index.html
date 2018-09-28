@@ -1,1 +1,110 @@
-<h1>hello world</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>toturial.js</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
+    <link href="css/tutorial.css" rel="stylesheet" />
+    <style>
+        .icon-block .material-icons {
+            font-size: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <br>
+        <br>
+        <h1 class="center blue-grey-text">tutorial.js</h1>
+        <p class="center">
+            The best step-by-step feature introduction for your web sites, that's a promise!
+        </p>
+        <br>
+        <p class="center">
+            <button id="demo1" class="btn-large purple waves-effect waves-light" target="_blank" title="Try it!">
+                <i class="material-icons left">
+                    play_arrow
+                </i>
+                try it!
+            </button>
+            <a class="btn-large blue-grey lighten-3 waves-effect waves-light" href="https://github.com/xxxmatko/tutorial.js" target="_blank" title="Download tutorial.js">
+                <i class="material-icons left">
+                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                        <path fill="#fff" d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                    </svg>
+                </i>
+                download
+            </a>
+        </p>
+    </div>  
+    <br>
+    <br> 
+    <div class="container">
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m4">
+                    <div class="icon-block">
+                        <h2 class="center blue-grey-text">
+                            <i class="material-icons">call_split</i>
+                        </h2>
+                        <h5 class="center">Without Dependencies</h5>
+                        <p class="light center">
+                            Unlike the others, <strong>tutorial.js</strong> does not depend on any other library.
+                            Thanks to that, it's really small (3.5 KB of javascript and 3.9 KB of css).
+                        </p>
+                    </div>
+                </div>
+                <div class="col s12 m4">
+                    <div class="icon-block">
+                        <h2 class="center blue-grey-text">
+                            <i class="material-icons">settings</i>
+                        </h2>
+                        <h5 class="center">Easy to Use</h5>
+                        <p class="light center">
+                            Using it is easy, because it does not require any configuration options. All you need is to define the steps of your tutorial.
+                        </p>
+                    </div>                    
+                </div>
+                <div class="col s12 m4">
+                    <div class="icon-block">
+                        <h2 class="center blue-grey-text">
+                            <i class="material-icons">public</i>
+                        </h2>
+                        <h5 class="center">Compatible</h5>
+                        <p class="light center">
+                            Plays well with Firefox, Chrome, Opera, Edge and Safari.
+                            To run it in Internet Explorer you need to use polyfill like this 
+                            <a href="https://github.com/zloirock/core-js" target="_blank" rel="noopener noreferrer">one</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/tutorial.js"></script>
+    <script>
+        $(function() {
+            $("#demo1").click(function() {
+                tutorial([{
+                    target: ".container .btn-large:first-child",
+                    html: "Hi,<br>you've just triggered the <b>demo</b> tutorial.<br>Click the arrow button to proceed to the next step.",
+                    position: "top"
+                }, {
+                    target: ".container h1",
+                    html: "This step-by-step tutorial was made using <b>tutorial.js</b>.<br>You can end the tutorial anytime by pressing the <b>Esc</b> key.",
+                    position: "bottom"
+                }, {
+                    target: ".container .btn-large:nth-child(2)",
+                    html: "If you liked it, you can download<br>the source code and use it for free.",
+                    position: "right"
+                }]).start();
+            });
+        });
+    </script>
+</body>
+</html>
