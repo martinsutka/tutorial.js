@@ -52,6 +52,30 @@
     </style>
 </head>
 <body>
+    <nav class="transparent z-depth-0" role="navigation">
+        <div class="nav-wrapper container">
+            <ul class="left hide-on-med-and-down">
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#how-to-use-it">How to use it</a>
+                </li>
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#how-it-works">How it works</a>
+                </li>
+            </ul>
+            <ul id="nav-mobile" class="sidenav">
+                <li>
+                    <h3 class="center blue-grey-text">tutorial.js</h3>
+                </li>
+                <li>
+                    <a href="#how-to-use-it">How to use it</a>
+                </li>
+                <li>
+                    <a href="#how-it-works">How it works</a>
+                </li>
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger blue-grey-text"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
     <div class="container">
         <br>
         <br>
@@ -186,6 +210,8 @@
         hljs.initHighlightingOnLoad();
 
         $(function() {
+            $(".sidenav").sidenav();
+
             $("#demo1").click(function() {
                 tutorial([{
                     target: ".container .btn-large:first-child",
