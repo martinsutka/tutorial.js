@@ -1,5 +1,5 @@
 /*!
- * tutorial.js v0.0.0.0000 (https://github.com/xxxmatko/tutorial.js)
+ * tutorial.js v1.0.0.0000 (https://github.com/xxxmatko/tutorial.js)
  * Copyright 2018 xxxmatko
  */
 (function (root, factory) {
