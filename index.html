@@ -23,6 +23,10 @@
             border-radius: 3px;
         }
 
+        b code {
+            color: #90a4ae;
+        }
+
         ol {
             padding: 0;
             counter-reset: step;
@@ -61,6 +65,12 @@
                 <li>
                     <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#how-it-works">How it works</a>
                 </li>
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#examples">Examples</a>
+                </li>
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#documentation">Documentation</a>
+                </li>                
             </ul>
             <ul id="nav-mobile" class="sidenav">
                 <li>
@@ -72,6 +82,12 @@
                 <li>
                     <a href="#how-it-works">How it works</a>
                 </li>
+                <li>
+                    <a href="#examples">Examples</a>
+                </li>
+                <li>
+                    <a href="#documentation">Documentation</a>
+                </li>                   
             </ul>
             <a href="#" data-target="nav-mobile" class="sidenav-trigger blue-grey-text"><i class="material-icons">menu</i></a>
         </div>
@@ -111,7 +127,7 @@
                         <h2 class="center blue-grey-text">
                             <i class="material-icons">call_split</i>
                         </h2>
-                        <h5 class="center">Without Dependencies</h5>
+                        <h5 class="center">Independent</h5>
                         <p class="light center">
                             Unlike the others, <strong>tutorial.js</strong> does not depend on any other library.
                             Thanks to that, it's really small (3.5 KB of javascript and 3.9 KB of css).
@@ -193,14 +209,218 @@
                 <div class="row">
                     <div class="col s12">
                         <h4>How it works</h4>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="icon-block">
+                            <h2 class="center purple-text">
+                                <i class="material-icons">wrap_text</i>
+                            </h2>
+                            <h5 class="center">It's all about steps</h5>
+                            <p class="light center">
+                                Each step has it's <b><code>target</code></b> HTML element and <b><code>html</code></b> content, which will be displayed
+                                around the target.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="icon-block">
+                            <h2 class="center purple-text">
+                                <i class="material-icons">av_timer</i>
+                            </h2>
+                            <h5 class="center">It's all about promises</h5>
+                            <p class="light center">
+                                Tutorial itself represents a promise, which is fullfiled when tutorial ends. Each step is also transformerd into a promise.
+                                The next step will not be invoked unless the previous step is fullfiled. Thanks to that you can create dynamic tutorials, whic can react
+                                to website changes.
+                            </p>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>  
+    <br>
+    <br>
+    <div id="examples" class="purple lighten-1 white-text">
+        <div class="container">
+            <div class="section">
+                <div class="row">
+                    <div class="col s12">
+                        <h4>Examples</h4>
                         <p>
                             todo
                         </p>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>    
+        </div>        
+    </div>      
+    <br>
+    <br>
+    <div id="documentation">
+        <div class="container">
+            <div class="section">
+                <div class="row">
+                    <div class="col s12">
+                        <h4>Documentation</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m5">
+                        <h5 class="purple-text">tutorial([steps])</h5>
+                        <p>
+                            Creates new instance of the turorial object.
+                        </p>
+                        <h6>Parameters</h6>
+                        <ul>
+                            <li>
+                                <b><code>steps</code></b> {Array} Array of tutorial steps.
+                            </li>
+                        </ul>
+                        <h6>Returns</h6>
+                        <ul>
+                            <li>
+                                <b><code>tutorial</code></b> {object}.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col s12 m7">
+                        <h6>Example</h6>
+                        <pre><code class="javascript">var t = tutorial([{
+    target: ".container .btn-large:first-child",
+    html: "Hi, this is the first step"
+}, {
+    target: ".container h1",
+    html: "The next step"
+}]);</code></pre>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col s12 m5">
+                        <h5 class="purple-text">tutorial.start()</h5>
+                        <p>
+                            Starts the tutorial.
+                        </p>
+                        <h6>Returns</h6>
+                        <ul>
+                            <li>
+                                <b><code>promise</code></b> {Promise}.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col s12 m7">
+                        <h6>Example</h6>
+                        <pre><code class="javascript">var promise = tutorial([/*...*/]).start();</code></pre>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col s12 m5">
+                        <h5 class="purple-text">step</h5>
+                        <p>
+                            Object which describes tutorial step.
+                        </p>
+                        <h6>Properties</h6>
+                        <ul>
+                            <li>
+                                <b><code>target</code></b> {string} (required) CSS selector string representing the target DOM element.
+                            </li>
+                            <li>
+                                <b><code>html</code></b> {string} (required) HTML string representing the step content.
+                            </li>   
+                            <li>
+                                <b><code>position</code></b> {string} (optional) The step tooltip position. Defaults to "right". Valid values are: top, right, bottom, left.
+                            </li>
+                            <li>
+                                <b><code>onCreate</code></b> {function} (optional) Function which is called before the step tooltip is created.
+                            </li>
+                            <li>
+                                <b><code>onNext</code></b> {function} (optional) Function which is called before proceeding to the next step.
+                            </li>                                                         
+                        </ul>
+                    </div>
+                    <div class="col s12 m7">
+                        <h6>Example</h6>
+                        <pre><code class="javascript">var step = {
+    target: ".container .btn-large:first-child",
+    html: "Hi, you've just triggered the &lt;b&gt;demo&lt;/b&gt; tutorial.",
+    position: "top"
+    onCreate: function() {
+        console.info("onCreate");
+    },
+    onNext: function() { 
+        console.info("onNext");
+    }
+}</code></pre>
+                    </div>                    
+                </div>   
+                <div class="row">
+                    <div class="col s12 m5">
+                        <h5 class="purple-text">step.onCreate([index, step, result])</h5>
+                        <p>
+                            Function which is called before the step tooltip is created.
+                        </p>
+                        <h6>Parameters</h6>
+                        <ul>
+                            <li>
+                                <b><code>index</code></b> {number} Index of the current step.
+                            </li>                            
+                            <li>
+                                <b><code>step</code></b> {object} Instance of the current step.
+                            </li>
+                            <li>
+                                <b><code>result</code></b> {object} The result from the previous step.
+                            </li>                            
+                        </ul>
+                    </div>
+                    <div class="col s12 m7">
+                        <h6>Example</h6>
+                        <pre><code class="javascript">var step = {
+    target: ".container .btn-large:first-child",
+    html: "Hi, you've just triggered the &lt;b&gt;demo&lt;/b&gt; tutorial.",
+    onCreate: function(index, step, result) {
+        // ...
+    }
+}</code></pre>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col s12 m5">
+                        <h5 class="purple-text">step.onNext([index, step, resolve])</h5>
+                        <p>
+                            Function which is called before proceeding to the next step. This function is called automatically when user clicks the
+                            arrow button in the step's tooltip. This callback is not required and by default it proceeds to the next step immediately.
+                            However, if you implement this method, the next is postponed until the <b><code>resolve</code></b> function is called.
+                            The parameter passed to the <code>resolve</code> function will be passed to the next step's <code>onCreate</code> callback.
+                        </p>
+                        <h6>Parameters</h6>
+                        <ul>
+                            <li>
+                                <b><code>index</code></b> {number} Index of the next step.
+                            </li>                            
+                            <li>
+                                <b><code>step</code></b> {object} Instance of the next step.
+                            </li>
+                            <li>
+                                <b><code>resolve</code></b> {function} Function to resolve the current step's Promise.
+                            </li>                            
+                        </ul>
+                    </div>
+                    <div class="col s12 m7">
+                        <h6>Example</h6>
+                        <pre><code class="javascript">var step = {
+    target: ".container .btn-large:first-child",
+    html: "Hi, you've just triggered the &lt;b&gt;demo&lt;/b&gt; tutorial.",
+    onNext: function(index, step, resolve) {
+        // Do some async work, like AJAX call and 
+        // proceed to the next step after the 
+        // AJAX call completes
+    }
+}</code></pre>
+                    </div>                    
+                </div>                 
+            </div>
+        </div>        
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
