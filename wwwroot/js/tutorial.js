@@ -1,3 +1,7 @@
+/*!
+ * tutorial.js v1.0.0.1001 (https://github.com/xxxmatko/tutorial.js)
+ * Copyright 2018 xxxmatko
+ */
 (function (root, factory) {
     if (typeof (define) === "function" && define.amd) {
         // AMD. Register as an anonymous module.
@@ -215,7 +219,7 @@
 
         // Call the onCreate callback if specified
         if (typeof (step.onCreate) === "function") {
-            step.onCreate.apply(scope, [step, result]);
+            step.onCreate.apply(scope, [index, step, result]);
         }
 
         // var target = $(step.target);
@@ -227,7 +231,7 @@
         var html = step.html || "";
         var position = step.position || "right";
         var len = steps.length;
-        var onNext = step.onNext || function(nextStep, r) { r(); };
+        var onNext = step.onNext || function(nextIndex, nextStep, r) { r(); };
 
         // Create pulse element
         var pulse = _createPulse(target, scope.container);
@@ -235,7 +239,7 @@
         // Create tip an its promise
         var tip;
         var deferred = new Promise(function(resolve) {
-            tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, steps[index + 1], resolve));
+            tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, index + 1, steps[index + 1], resolve));
         });
         
         // Create handler for the next step creation
