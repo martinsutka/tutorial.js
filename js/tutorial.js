@@ -215,7 +215,7 @@
 
         // Call the onCreate callback if specified
         if (typeof (step.onCreate) === "function") {
-            step.onCreate.apply(scope, [step, result]);
+            step.onCreate.apply(scope, [index, step, result]);
         }
 
         // var target = $(step.target);
