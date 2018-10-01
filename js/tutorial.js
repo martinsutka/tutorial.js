@@ -227,7 +227,7 @@
         var html = step.html || "";
         var position = step.position || "right";
         var len = steps.length;
-        var onNext = step.onNext || function(nextStep, r) { r(); };
+        var onNext = step.onNext || function(nextIndex, nextStep, r) { r(); };
 
         // Create pulse element
         var pulse = _createPulse(target, scope.container);
@@ -235,7 +235,7 @@
         // Create tip an its promise
         var tip;
         var deferred = new Promise(function(resolve) {
-            tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, steps[index + 1], resolve));
+            tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, index + 1, steps[index + 1], resolve));
         });
         
         // Create handler for the next step creation
