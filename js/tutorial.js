@@ -1,3 +1,7 @@
+/*!
+ * tutorial.js v0.0.0.0000 (https://github.com/xxxmatko/tutorial.js)
+ * Copyright 2018 xxxmatko
+ */
 (function (root, factory) {
     if (typeof (define) === "function" && define.amd) {
         // AMD. Register as an anonymous module.
