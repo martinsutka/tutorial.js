@@ -24,7 +24,11 @@
         }
 
         b code {
-            color: #90a4ae;
+            color: #607d8b;
+        }
+
+        .purple b code {
+            color: #ce93d8;
         }
 
         ol {
@@ -247,10 +251,23 @@
                 <div class="row">
                     <div class="col s12">
                         <h4>Examples</h4>
-                        <p>
-                            todo
-                        </p>
                     </div>
+                    <div class="col s12 m6 icon-block">
+                        <h5 id="example-hello-world">
+                            <i class="material-icons">info</i>
+                            Hello world
+                        </h5>
+                        <p>
+                            This is a very basic usage of the library. You can define steps while calling the <b><code>tutorial</code></b>
+                            method and you can start the tutorial right away.
+                        </p>
+                        <a class="btn purple lighten-3 waves-effect waves-light" target="_blank" title="Try it!">
+                            <i class="material-icons left">
+                                play_arrow
+                            </i>
+                            try it!
+                        </a>
+                    </div>                    
                 </div>
             </div>
         </div>        
@@ -269,12 +286,12 @@
                     <div class="col s12 m5">
                         <h5 class="purple-text">tutorial([steps])</h5>
                         <p>
-                            Creates new instance of the turorial object.
+                            Creates new instance of the <a class="blue-grey-text text-lighten-2" href="#doc-tutorial">turorial</a> object.
                         </p>
                         <h6>Parameters</h6>
                         <ul>
                             <li>
-                                <b><code>steps</code></b> {Array} Array of tutorial steps.
+                                <b><code>steps</code></b> {Array} Array of tutorial <a class="blue-grey-text text-lighten-2" href="#doc-step">steps</a>.
                             </li>
                         </ul>
                         <h6>Returns</h6>
@@ -315,7 +332,41 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m5">
-                        <h5 class="purple-text">step</h5>
+                        <h5 id="doc-tutorial" class="purple-text">tutorial</h5>
+                        <p>
+                            Object which describes tutorial.
+                        </p>
+                        <h6>Properties</h6>
+                        <ul>
+                            <li>
+                                <b><code>steps</code></b> {Array} Array of steps.
+                            </li>
+                            <li>
+                                <b><code>options</code></b> {object} Object representing tutorial options.
+                            </li>   
+                            <li>
+                                <b><code>container</code></b> {HTMLElement} HTML element which is the container for the tutorial.
+                            </li>
+                            <li>
+                                <b><code>promise</code></b> {Promise} Promise for the whole tutorial. When it is fullfiled the tutorial s finished.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col s12 m7">
+                        <h6>Example</h6>
+                        <pre><code class="javascript">var t = tutorial([{
+    target: ".container .btn-large:first-child",
+    html: "Hi, you've just triggered the &lt;b&gt;demo&lt;/b&gt; tutorial.",
+});
+t.start();
+t.promise.then(function() {
+    console.info("Tutorial is done");
+});</code></pre>
+                    </div>                    
+                </div>                 
+                <div class="row">
+                    <div class="col s12 m5">
+                        <h5 id="doc-step" class="purple-text">step</h5>
                         <p>
                             Object which describes tutorial step.
                         </p>
@@ -421,6 +472,49 @@
             </div>
         </div>        
     </div>
+    <footer class="page-footer purple">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">tutorial.js</h5>
+                    <p class="grey-text text-lighten-4">
+                        The best step-by-step feature introduction for your web sites, that's a promise!
+                    </p>
+                </div>
+                <div class="col l3 s12">
+                    <h5 class="white-text">&nbsp;</h5>
+                    <ul>
+                        <li>
+                            <a class="white-text" href="#how-to-use-it">How to use it</a>
+                        </li>
+                        <li>
+                            <a class="white-text" href="#how-it-works">How it works</a>
+                        </li>
+                        <li>
+                            <a class="white-text" href="#examples">Examples</a>
+                        </li>
+                        <li>
+                            <a class="white-text" href="#documentation">Documentation</a>
+                        </li>                         
+                    </ul>
+                </div>
+                <div class="col l3 s12">
+                    <h5 class="white-text">Examples</h5>
+                    <ul>
+                        <li>
+                            <a class="white-text" href="#example-hello-world">Hello world</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                This project by <a class="purple-text text-lighten-3" href="https://github.com/xxxmatko">xxxmatko</a> can be found on
+                <a class="purple-text text-lighten-3" href="https://github.com/xxxmatko/tutorial.js">GitHub</a>
+            </div>
+        </div>
+    </footer>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
