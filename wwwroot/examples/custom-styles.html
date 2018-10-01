@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>toturial.js | Custom styles</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
+    <link href="../css/tutorial.css" rel="stylesheet" />
+    <style>
+        .icon-block .material-icons {
+            font-size: inherit;
+        }
+    </style>
+    <style>
+        .tutorial .tutorial__pulse {
+            outline: 9999px solid rgba(0,0,0,0.5);
+        }
+
+        .tutorial .tutorial__pulse > div {
+            display: none;
+        }
+
+        .tutorial .tutorial__tip {
+            margin-top: 1rem;
+            border-radius: 2px;
+            transform: scale(.8) translateX(-50%);
+        }
+
+        .tutorial .tutorial__tip > div {
+            margin: 1rem;
+        }        
+
+        .tutorial .tutorial__tip.tutorial__tip--visible {
+            transform: scale(1) translateX(-50%);
+        }
+
+        .tutorial .tutorial__tip::before {
+            display: none;
+        }
+
+        .tutorial .tutorial__footer {
+            position: absolute;
+            right: -24px;
+            margin: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .tutorial .tutorial__footer > span {
+            display: none;
+        }        
+    </style>
+</head>
+<body>
+    <nav class="transparent z-depth-0" role="navigation">
+        <div class="nav-wrapper container">
+            <ul class="left hide-on-med-and-down">
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#how-to-use-it">How to use it</a>
+                </li>
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#how-it-works">How it works</a>
+                </li>
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#examples">Examples</a>
+                </li>
+                <li>
+                    <a class="waves-effect waves-purple btn-flat blue-grey-text" href="#documentation">Documentation</a>
+                </li>                
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <br>
+        <br>
+        <h1 class="center blue-grey-text">tutorial.js</h1>
+        <p class="center">
+            The best step-by-step feature introduction for your web sites, that's a promise!
+        </p>
+    </div>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="../js/tutorial.js"></script>
+    <script>
+        $(function() {
+            tutorial([{
+                target: "nav li:first-child a",
+                html: "Click to see how to use it",
+                position: "bottom"
+            }, {
+                target: "nav li:nth-child(2) a",
+                html: "Click to see how it works",
+                position: "bottom"
+            }, {
+                target: "nav li:last-child a",
+                html: "Find out all in the<br>documentation",
+                position: "bottom"
+            }]).start();
+        });
+    </script>
+</body>
+</html>
