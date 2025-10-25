@@ -1,43 +1,55 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    // "http://localhost/tutorial.js/${relativeFile}"
-    // "localhost\\${workspaceRootFolderName}\\${fileBasename}"
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Open in Chrome",
-            "group": "build",
-            "command": "Chrome",
-            "windows": {
-                "command": "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
-            },
-            "args": [
-                "localhost\\${workspaceRootFolderName}\\index.html"
-            ],
-            "problemMatcher": []
-        },{
-            "label": "Open in Firefox",
-            "command": "Firefox",
-            "group": "build",
-            "windows": {
-                "command": "C:/Program Files (x86)/Mozilla Firefox/firefox.exe"
-            },
-            "args": [
-                "localhost\\${workspaceRootFolderName}\\index.html"
-            ],
-            "problemMatcher": []
-        },{
-            "label": "Build",
-            "command": "Shell",
-            "windows": {
-                "command": "build.cmd"
-            },            
-            "group": "build",
-            "presentation": {
-				"panel": "new"
-			},
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "restore",
+      "type": "npm",
+      "script": "install",
+      "group": "build",
+      "presentation": {
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "clean"
+      ],
+      "windows": {
+        "command": ".\\node_modules\\.bin\\grunt"
+      },
+      "args": [
+        "--gruntfile",
+        "'gruntfile.js'",
+        "buildTask",
+        "--color"
+      ],
+      "group": "build",
+      "presentation": {
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "clean",
+      "type": "shell",
+      "windows": {
+        "command": ".\\node_modules\\.bin\\grunt"
+      },
+      "args": [
+        "--gruntfile",
+        "'gruntfile.js'",
+        "cleanTask",
+        "--color"
+      ],
+      "group": "build",
+      "presentation": {
+        "panel": "new"
+      },
+      "problemMatcher": []
+    }
+  ]
 }
