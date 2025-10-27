@@ -1,20 +1,22 @@
 /*!
- * tutorial.js v1.0.0.1001 (https://github.com/xxxmatko/tutorial.js)
- * Copyright 2018 xxxmatko
+ * tutorial.js v1.0.0 (https://martinsutka.github.io/tutorial.js)
+ * Copyright 2025 martinsutka
  */
 (function (root, factory) {
-    if (typeof (define) === "function" && define.amd) {
+    if ((typeof (define) === "function") && define.amd) {
         // AMD. Register as an anonymous module.
-        define(["jquery"], factory);
+        define([], factory);
     } 
     else {
         // Browser globals
-        root.tutorial = factory(root.jQuery);
+        root.tutorial = factory();
     }
-}(typeof (self) !== "undefined" ? self : this, function ($) {
+}((typeof (self) !== "undefined") ? self : this, () => {
     //#region [ Fields ]
     
-    var doc = (function () { return this; })().document;
+    const global = (function () { return this; })();
+    const doc = global.document;
+    const name = "tutorial";
     
     //#endregion
 
@@ -30,10 +32,10 @@
     function _addClass(el, className) {
         if (el.classList) {
             el.classList.add(className);
+            return;
         }
-        else {
-            el.className += " " + className;
-        }
+
+        el.className += " " + className;
     }
 
 
@@ -46,10 +48,10 @@
     function _removeClass(el, className) {
         if (el.classList) {
             el.classList.remove(className);
+            return;
         }
-        else {
-            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-        }
+        
+        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
     }
 
 
@@ -59,9 +61,9 @@
      * @param {HTMLElement} el Target element.
      */
     function _getHeight(el) {
-        var style = getComputedStyle(el);
-        return parseInt(style.height);        
+        return parseInt(getComputedStyle(el).height);        
     }
+
 
     /**
      * Gets element width.
@@ -69,8 +71,7 @@
      * @param {HTMLElement} el Target element.
      */
     function _getWidth(el) {
-        var style = getComputedStyle(el);
-        return parseInt(style.width);        
+        return parseInt(getComputedStyle(el).width);        
     }
 
 
@@ -80,8 +81,8 @@
      * @returns {HTMLElement} Container element.
      */
     function _createContainer() {
-        var el = doc.createElement("div");
-        el.className = "tutorial";
+        const el = doc.createElement("div");
+        el.className = name;
 
         doc.body.appendChild(el);
 
@@ -96,7 +97,7 @@
      * @returns {object} Element's position and size.
      */
     function _getPosition(el) {
-        var rect = el.getBoundingClientRect();
+        const rect = el.getBoundingClientRect();
         return {
             t: rect.top + doc.body.scrollTop,
             l: rect.left + doc.body.scrollLeft,
@@ -114,18 +115,18 @@
      * @returns {HTMLElement} Pulse element.
      */
     function _createPulse(target, container) {
-        var pos = _getPosition(target);
+        const pos = _getPosition(target);
         
         // Create element
-        var el = doc.createElement("div");
-        el.className = "tutorial__pulse";
+        const el = doc.createElement("div");
+        el.className = `${name}__pulse`;
         el.innerHTML = "<div></div><div></div><div></div><div></div>";
 
         // Set it's style
-        el.style.width = pos.w + "px";
-        el.style.height = pos.h + "px";
-        el.style.top = pos.t + "px";
-        el.style.left = pos.l + "px";
+        el.style.width = `${pos.w}px`;
+        el.style.height = `${pos.h}px`;
+        el.style.top = `${pos.t}px`;
+        el.style.left = `${pos.l}px`;
 
         container.appendChild(el);
 
@@ -145,56 +146,80 @@
      * @returns {HTMLElement} Pulse element.
      */    
     function _createTip(target, container, html, position, index, length, callback) {
-        var pos = _getPosition(target);
+        const pos = _getPosition(target);
 
         // Create element
-        var el = doc.createElement("div");
-        el.className = "tutorial__tip";
-        el.innerHTML = "<div>" +
-                            html +
-                            "<div class='tutorial__footer'>" +
-                                "<span>" + (index + 1) + " / " + length + "</span>" +
-                                "<button>" +
-                                    ((index + 1) < length ? "<svg style='width:1.2em;height:1.2em' viewBox='0 0 24 24'><path fill='#fff' d='M8,5.14V19.14L19,12.14L8,5.14Z' /></svg>" : "<svg style='width:1.2em;height:1.2em' viewBox='0 0 24 24'><path fill='#fff' d='M18,18H6V6H18V18Z' /></svg>") +
-                                "</button>" +                            
-                            "</div>" +
-                       "</div>";
+        const el = doc.createElement("div");
+        el.className = `${name}__tip`;
+        el.innerHTML = `<div>
+                            ${html}
+                            <div class="${name}__footer">
+                                <span>${(index + 1)} / ${length}</span>
+                                <button class="${name}__navigator">
+                                    ${(index + 1) < length ? "<svg viewBox='0 0 24 24'><path fill='currentColor' d='M8,5.14V19.14L19,12.14L8,5.14Z' /></svg>" : "<svg viewBox='0 0 24 24'><path fill='currentColor' d='M18,18H6V6H18V18Z' /></svg>"}
+                                </button>
+                            </div>
+                        </div>`;
 
         container.appendChild(el);
 
         // Attach the callback to the button
-        el.querySelector(".tutorial__footer > button").addEventListener("click", callback);
+        el.querySelector(`.${name}__navigator`).addEventListener("click", callback);
 
         // Set the position
         switch (position) {
             case "top":
-                el.style.top = (pos.t - _getHeight(el)) + "px";
-                el.style.left = (pos.l + (pos.w / 2)) + "px";
-                _addClass(el, "tutorial__tip--top");
+                el.style.top = `${(pos.t - _getHeight(el))}px`;
+                el.style.left = `${(pos.l + (pos.w / 2))}px`;
+                _addClass(el, `${name}__tip--top`);
                 break;
             case "right":
-                el.style.top = pos.t + (pos.h / 2) + "px";
-                el.style.left = (pos.l + pos.w) + "px";
-                _addClass(el, "tutorial__tip--right");
+                el.style.top = `${pos.t + (pos.h / 2)}px`;
+                el.style.left = `${(pos.l + pos.w)}px`;
+                _addClass(el, `${name}__tip--right`);
                 break;
             case "bottom":
-                el.style.top = (pos.t + pos.h) + "px";
-                el.style.left = pos.l + (pos.w / 2) + "px";
-                _addClass(el, "tutorial__tip--bottom");        
+                el.style.top = `${(pos.t + pos.h)}px`;
+                el.style.left = `${pos.l + (pos.w / 2)}px`;
+                _addClass(el, `${name}__tip--bottom`);        
                 break;
             case "left":
-                el.style.top = pos.t + (pos.h / 2) + "px";
-                el.style.left = (pos.l - _getWidth(el)) + "px";
-                _addClass(el, "tutorial__tip--left");        
+                el.style.top = `${pos.t + (pos.h / 2)}px`;
+                el.style.left = `${(pos.l - _getWidth(el))}px`;
+                _addClass(el, `${name}__tip--left`);        
                 break;
         }
 
         // Show the tip on the screen, just after a little while
-        setTimeout(function () {
-            _addClass(el, "tutorial__tip--visible");
-        }, 100);
+        setTimeout(() => _addClass(el, `${name}__tip--visible`), 100);
 
         return el;
+    }
+
+
+    function _scrollToElement(element, callback) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        let lastPosition = window.scrollY;
+        let sameCount = 0;
+
+        function checkScrollStopped() {
+            const current = global.scrollY;
+            if (current === lastPosition) {
+                sameCount++;
+                
+                if (sameCount > 5) {
+                    callback();
+                    return;
+                }
+            } 
+            else {
+                sameCount = 0;
+                lastPosition = current;
+            }
+            requestAnimationFrame(checkScrollStopped);
+        }
+        requestAnimationFrame(checkScrollStopped);
     }
 
     
@@ -215,48 +240,50 @@
         }
 
         // Get the current step
-        var step = steps[index];
+        const step = steps[index];
 
         // Call the onCreate callback if specified
         if (typeof (step.onCreate) === "function") {
             step.onCreate.apply(scope, [index, step, result]);
         }
 
-        // var target = $(step.target);
-        var target = doc.querySelector(step.target);
+        const target = doc.querySelector(step.target);
         if(!target) {
-            throw "Target for the step '" + index + "' was not found.";
+            throw `Target for the step '${index}' was not found.`;
         }
-        
-        var html = step.html || "";
-        var position = step.position || "right";
-        var len = steps.length;
-        var onNext = step.onNext || function(nextIndex, nextStep, r) { r(); };
 
-        // Create pulse element
-        var pulse = _createPulse(target, scope.container);
+        const html = step.html || "";
+        const position = step.position || "right";
+        const len = steps.length;
+        const onNext = step.onNext || function(nextIndex, nextStep, r) { r(); };
 
-        // Create tip an its promise
-        var tip;
-        var deferred = new Promise(function(resolve) {
-            tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, index + 1, steps[index + 1], resolve));
-        });
-        
-        // Create handler for the next step creation
-        var next = _createStep.bind(scope, index + 1, steps, resolve, scope);
+        _scrollToElement(target, () => {
+            // Create pulse element
+            const pulse = _createPulse(target, scope.container);
 
-        // When the promise is resolved go to next step
-        deferred.then(function(r) {
-            var handler = function() {
-                tip.removeEventListener("transitionend", handler);
-                pulse.parentNode.removeChild(pulse);
-                tip.parentNode.removeChild(tip);
-                deferred = null;
-                next(r);
-            };
-            // It's based on the fact that the tip is displayed using transition
-            tip.addEventListener("transitionend", handler); 
-            _removeClass(tip, "tutorial__tip--visible");
+            // Create tip an its promise
+            let tip;
+            let deferred = new Promise((resolve) => {
+                tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, index + 1, steps[index + 1], resolve));
+            });
+            
+            // Create handler for the next step creation
+            const next = _createStep.bind(scope, index + 1, steps, resolve, scope);
+
+            // When the promise is resolved go to next step
+            deferred.then((r) => {
+                const handler = function() {
+                    tip.removeEventListener("transitionend", handler);
+                    pulse.parentNode.removeChild(pulse);
+                    tip.parentNode.removeChild(tip);
+                    deferred = null;
+                    next(r);
+                };
+
+                // It's based on the fact that the tip is displayed using transition
+                tip.addEventListener("transitionend", handler); 
+                _removeClass(tip, `${name}__tip--visible`);
+            });
         });
     }
 
@@ -293,16 +320,16 @@
      * @param {array} steps Tutorial steps.
      * @param {object} options Options.
      */
-    var Tutorial = function(steps, options) {
+    const Tutorial = function(steps, options) {
         this.steps = steps || [];
         this.options = options || {};
         this.container = null;
         this.promise = null;
 
         this._onEscapeHandler = null;
-
-        if(!(this.steps instanceof Array) || (this.steps.length <= 0)) {
-            console.error("Unable to create empty tutorial.");
+        
+        if(!Array.isArray(this.steps) || (this.steps.length <= 0)) {
+            console.error("Tutorial() : Unable to create empty tutorial.");
             return;
         }
     };
@@ -318,22 +345,30 @@
      * @returns {Promise} Promise which is resolved when the tutorial ends.
      */
     Tutorial.prototype.start = function() {
-        var $this = this;
-
         // Create container
         this.container = _createContainer();
 
+        // Disable events
+        this.container.addEventListener("wheel", e => e.preventDefault(), { passive: false });
+        this.container.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+        this.container.addEventListener("mousedown", e => e.preventDefault());
+        this.container.addEventListener("mouseup", e => e.preventDefault());
+        this.container.addEventListener("click", e => e.preventDefault());
+
+        // Disable keyboard events
+        //document.body.style.overflow = 'hidden';
+
         // Create main promise
-        this.promise = new Promise(function(resolve) {
-            $this._onEscapeHandler = _onEscape.bind($this, resolve);
-            doc.addEventListener("keydown", $this._onEscapeHandler);
-            _createStep(0, $this.steps, resolve, $this);
+        this.promise = new Promise((resolve) => {
+            this._onEscapeHandler = _onEscape.bind(this, resolve);
+            doc.addEventListener("keydown", this._onEscapeHandler);
+            _createStep(0, this.steps, resolve, this);
         });
 
         // Clean things when the tutorial ends
-        this.promise.then(function() {
-            doc.removeEventListener("keydown", $this._onEscapeHandler);
-            doc.body.removeChild($this.container);
+        this.promise.then(() => {
+            doc.removeEventListener("keydown", this._onEscapeHandler);
+            doc.body.removeChild(this.container);
         });
 
         return this.promise;
@@ -345,10 +380,7 @@
      * 
      * @returns {Tutorial} New tutorial.
      */
-    function ctor() {
-        var args = Array.prototype.slice.call(arguments);
-        return new Tutorial(args[0], args[1]);
-    }
+    const ctor = (...args) => new Tutorial(...args);
 
     //#endregion
 
