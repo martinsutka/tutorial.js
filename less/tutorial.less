@@ -1,199 +1,208 @@
-@import "_mixins.less";
-
 /*!
- * tutorial.js v1.0.0.1001 (https://github.com/xxxmatko/tutorial.js)
- * Copyright 2018 xxxmatko
+ * tutorial.js v1.0.0 (https://martinsutka.github.io/tutorial.js)
+ * Copyright 2025 martinsutka
  */
+body {
+    --tutorial-surface: rgba(255, 255, 255, .001);
+    --tutorial-pulse: #ff5722;
+    --tutorial-pulse-border-width: 2px;
+    --tutorial-pulse-size: 10px;
+    --tutorial-tip-background: #607d8b;
+    --tutorial-tip-color: rgba(255, 255, 255, .93);
+}
+
 .tutorial {
     position: fixed;
     width: 100vw;
     height: 100vh;
     z-index: 1002;
-    background: @tutorial-background;
+    background: var(--tutorial-surface);
     top: 0;
     left: 0;
 
-    .tutorial__pulse {
+    &__pulse {
         overflow: initial;
         position: absolute;
         pointer-events: none;
 
         > div {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            .content;
-            border: 2px solid @pulse-color;
+            width: var(--tutorial-pulse-size);
+            height: var(--tutorial-pulse-size);
+            content: "\00a0";
+            border: var(--tutorial-pulse-border-width) solid var(--tutorial-pulse);
             animation-duration: 1s;
             animation-fill-mode: both;
             animation-iteration-count: infinite;
 
             &:nth-child(1) {
                 animation-name: tutorial__pulse1;
-                border-width: 2px 0 0 2px;
+                border-width: var(--tutorial-pulse-border-width) 0 0 var(--tutorial-pulse-border-width);
             }
 
             &:nth-child(2) {
                 animation-name: tutorial__pulse2;
-                border-width: 2px 2px 0 0;
+                border-width: var(--tutorial-pulse-border-width) var(--tutorial-pulse-border-width) 0 0;
                 right: 0;
             }
 
             &:nth-child(3) {
                 animation-name: tutorial__pulse3;
-                border-width: 0 2px 2px 0;
+                border-width: 0 var(--tutorial-pulse-border-width) var(--tutorial-pulse-border-width) 0;
                 right: 0;
                 bottom: 0;
             }
 
             &:nth-child(4) {
                 animation-name: tutorial__pulse4;
-                border-width: 0 0 2px 2px;
+                border-width: 0 0 var(--tutorial-pulse-border-width) var(--tutorial-pulse-border-width);
                 bottom: 0;
             }
         }
     }
 
-    .tutorial__tip {
-        background: @tip-background;
-        color: @tip-color;
+    &__tip {
+        background: var(--tutorial-tip-background);
+        color: var(--tutorial-tip-color);
         font-size: 1em;
         border-radius: 1rem;
         opacity: 0;
         transform: scale(.8);
         transition: all .3s ease;
         position: absolute;
-        .shadow;
+        -webkit-box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
+        box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
         
         > div {
             margin: 1rem 1rem .5rem 1rem;
-
-            > .material-icons {
-                display: inline-block;
-                vertical-align: middle;
-            }
         }
 
-        &.tutorial__tip--visible {
+        &--visible {
             opacity: 1;
             transform: scale(1);
         }
 
-        &.tutorial__tip--right {
+        &--right {
             margin-left: 2rem;
             border-top-left-radius: 0;
 
             &::before {
-                .content;
+                content: "\00a0";
                 position: absolute;
                 width: 1rem;
                 height: 1rem;
                 top: 0;
                 left: 1px;
                 transform: translate(-100%,0);
-                border: .5rem solid @tip-background;
+                border: .5rem solid var(--tutorial-tip-background);
                 border-left-color: transparent;
                 border-bottom-color: transparent;
             }
         }
 
-        &.tutorial__tip--left {
+        &--left {
             margin-left: -2rem;
             border-top-right-radius: 0;
 
             &::before {
-                .content;
+                content: "\00a0";
                 position: absolute;
                 width: 1rem;
                 height: 1rem;
                 top: 0;
                 right: 1px;
                 transform: translate(100%,0);
-                border: .5rem solid @tip-background;
+                border: .5rem solid var(--tutorial-tip-background);
                 border-right-color: transparent;
                 border-bottom-color: transparent;
             }
         }
 
-        &.tutorial__tip--bottom {
+        &--bottom {
             margin-top: 2rem;
             border-top-left-radius: 0;
 
             &::before {
-                .content;
+                content: "\00a0";
                 position: absolute;
                 width: 1rem;
                 height: 1rem;
                 top: 1px;
                 left: 0;
                 transform: translate(0,-100%);
-                border: .5rem solid @tip-background;
+                border: .5rem solid var(--tutorial-tip-background);
                 border-right-color: transparent;
                 border-top-color: transparent;
             }
         }
 
-        &.tutorial__tip--top {
+        &--top {
             margin-top: -2rem;
             border-bottom-left-radius: 0;
 
             &::before {
-                .content;
+                content: "\00a0";
                 position: absolute;
                 width: 1rem;
                 height: 1rem;
                 bottom: 1px;
                 left: 0;
                 transform: translate(0,100%);
-                border: .5rem solid @tip-background;
+                border: .5rem solid var(--tutorial-tip-background);
                 border-right-color: transparent;
                 border-bottom-color: transparent;
             }
         }
     }
 
-    .tutorial__footer {
+    &__footer {
         display: flex;
+        flex-direction: row;
         margin-top: 1rem;
         align-items: center;
         height: 2rem;
 
         > span {
-            font-weight: 700;
+            font-weight: 600;
             flex: 1;
             opacity: .5;
-            font-size: .9em;
-            margin-top: -1px;
+            font-size: .8em;
+        }
+    }
+
+    &__navigator {
+        height: 2rem;
+        width: 2rem;
+        font-family: initial;
+        border: none;
+        padding: 0;
+        text-decoration: none;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;   
+        display: flex;
+        flex-direction: column;
+        justify-content: center;   
+        align-items: center; 
+        opacity: .5;
+        transition: all 0.3s ease;
+
+        svg {
+            width:1.2em;
+            height:1.2em;
         }
 
-        > button,
-        > button:active,
-        > button:focus {
-            height: 2rem;
-            width: 2rem;
-            transform: translate(.5rem,0);
-            font-family: initial;
-            border: none;
-            padding: 0;
-            margin-left: 1rem;
-            text-decoration: none;
-            background: transparent;
-            color: inherit;
-            cursor: pointer;
-            text-align: center;
-            -webkit-appearance: none;
-            -moz-appearance: none;   
-            display: flex;
-            flex-direction: column;
-            justify-content: center;   
-            opacity: .5;
-            transition: all 0.3s ease;      
+        &:active,
+        &:focus {
+            background-color: transparent;
         }
 
-        > button:hover {
+        &:hover {
             opacity: 1;
         }
-    }    
+    }
 }
 
 @keyframes tutorial__pulse1 {
