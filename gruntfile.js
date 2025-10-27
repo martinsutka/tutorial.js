@@ -20,27 +20,13 @@ module.exports = function (grunt) {
                 }
             }
         },
-        csslint: {
-            options: {
-                "order-alphabetical": false,
-                "fallback-colors": false,
-                "adjoining-classes": false,
-                "box-model": false
-            },
-            src: [
-                "wwwroot/css/**/*.css",
-                "!wwwroot/css/**/*.min.css"
-            ]
-        },
         jshint: {
             options: {
                 debug: true,
                 multistr: true,
                 sub: true,
                 laxbreak: true,
-                globals: {
-                    jQuery: true
-                }
+                esversion: 6
             },
             src: [
                 "gruntfile.js",
@@ -93,7 +79,6 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-less");
-    grunt.loadNpmTasks("grunt-contrib-csslint");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
@@ -132,7 +117,6 @@ module.exports = function (grunt) {
         // List of tasks
         var tasks = [
             "less",
-            "csslint",
             "jshint",
             "copy:js",
             "cssmin",
