@@ -151,7 +151,7 @@
         // Create element
         const el = doc.createElement("div");
         el.className = `${name}__tip`;
-        el.innerHTML = `<div>
+        el.innerHTML = `<div class="${name}__tip-container">
                             ${html}
                             <div class="${name}__footer">
                                 <span>${(index + 1)} / ${length}</span>
@@ -208,8 +208,8 @@
             if (current === lastPosition) {
                 sameCount++;
                 
-                if (sameCount > 5) {
-                    callback();
+                if (sameCount > 7) {
+                    setTimeout(() => callback(), 100);
                     return;
                 }
             } 
