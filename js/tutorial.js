@@ -146,6 +146,7 @@
      * @returns {HTMLElement} Pulse element.
      */    
     function _createTip(target, container, html, position, index, length, callback) {
+        console.debug("tutorial.js : Creating tip for the step %d", index);
         const pos = _getPosition(target);
 
         // Create element
@@ -191,13 +192,20 @@
         }
 
         // Show the tip on the screen, just after a little while
-        setTimeout(() => _addClass(el, `${name}__tip--visible`), 100);
+        setTimeout(() => _addClass(el, `${name}__tip--visible`), 20);
 
         return el;
     }
 
 
+    /**
+     * Scrolls the target element into the view.
+     * 
+     * @param {HTMLElement} element Target element.
+     * @param {function} callback Callback function.
+     */
     function _scrollToElement(element, callback) {
+        console.debug("tutorial.js : Scrolling to element %o", element);
         element.scrollIntoView({ behavior: "smooth", block: "center" });
 
         let lastPosition = window.scrollY;
@@ -208,8 +216,8 @@
             if (current === lastPosition) {
                 sameCount++;
                 
-                if (sameCount > 7) {
-                    setTimeout(() => callback(), 100);
+                if (sameCount > 10) {
+                    setTimeout(() => callback(), 10);
                     return;
                 }
             } 
@@ -258,6 +266,7 @@
         const onNext = step.onNext || function(nextIndex, nextStep, r) { r(); };
 
         _scrollToElement(target, () => {
+            console.debug("tutorial.js : Target was scrolled into the view %o", target);
             // Create pulse element
             const pulse = _createPulse(target, scope.container);
 
