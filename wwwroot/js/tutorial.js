@@ -144,11 +144,12 @@
      * @param {string} position Position of the tooltip.
      * @param {number} index Index of the current step.
      * @param {number} length Number of steps.
-     * @param {function} callback Callback which initialised.
+     * @param {function} nextCallback Callback which initialised.
+     * @param {function} prevCallback Callback which initialised.
      * @param {object} step Current step.
      * @returns {HTMLElement} Pulse element.
      */    
-    function _createTip(target, container, html, position, index, length, callback, step) {
+    function _createTip(target, container, html, position, index, length, nextCallback, prevCallback, stopCallback, step, options) {
         console.debug("tutorial.js : Creating tip for the step %d", index);
         const pos = _getPosition(target);
 
@@ -161,8 +162,17 @@
                             ${html}
                             <div class="${name}__footer">
                                 <span>${(index + 1)} / ${length}</span>
-                                <button class="${name}__navigator">
-                                    ${(index + 1) < length ? "<svg viewBox='0 0 24 24'><path fill='currentColor' d='M8,5.14V19.14L19,12.14L8,5.14Z' /></svg>" : "<svg viewBox='0 0 24 24'><path fill='currentColor' d='M18,18H6V6H18V18Z' /></svg>"}
+                                <button class="${name}__navigator ${name}__navigator--prev ${(index === 0) ? "tutorial__navigator--hidden" : "" }">
+                                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="m18 17l-8-5l8-5zM6 7h3v10H6z"/></svg>
+                                    <span>${typeof(step.prevText) === "string" ? step.prevText : options.prevText || ""}</span>
+                                </button>
+                                <button class="${name}__navigator ${name}__navigator--stop">
+                                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 7h10v10H7z"/></svg>
+                                    <span>${typeof(step.stopText) === "string" ? step.stopText : options.stopText || ""}</span>
+                                </button>
+                                <button class="${name}__navigator ${name}__navigator--next ${(index === (length - 1)) ? "tutorial__navigator--hidden" : "" }">
+                                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="m6 17l8-5l-8-5zM18 7h-3v10h3z"/></svg>
+                                    <span>${typeof(step.nextText) === "string" ? step.nextText : options.nextText || ""}</span>
                                 </button>
                             </div>
                         </div>`;
@@ -170,7 +180,9 @@
         container.appendChild(el);
 
         // Attach the callback to the button
-        el.querySelector(`.${name}__navigator`).addEventListener("click", callback);
+        el.querySelector(`.${name}__navigator--next`).addEventListener("click", nextCallback);
+        el.querySelector(`.${name}__navigator--prev`).addEventListener("click", prevCallback);
+        el.querySelector(`.${name}__navigator--stop`).addEventListener("click", stopCallback);
 
         // Set the position
         switch (position) {
@@ -268,7 +280,7 @@
         const html = step.html || "";
         const position = step.position || "right";
         const len = steps.length;
-        const onNext = step.onNext || function(nextIndex, nextStep, r) { r(); };
+        const onNext = step.onNext || function(nextIndex, nextStep, r) { r(nextIndex); };
 
         _scrollToElement(target, () => {
             console.debug("tutorial.js : Target has been scrolled into the view %o", target);
@@ -278,20 +290,27 @@
             // Create tip an its promise
             let tip;
             let deferred = new Promise((resolve) => {
-                tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, index + 1, steps[index + 1], resolve), step);
+                tip = _createTip(target, 
+                    scope.container, 
+                    html, 
+                    position, 
+                    index, 
+                    len, 
+                    onNext.bind(scope, index + 1, steps[index + 1], resolve),
+                    onNext.bind(scope, index - 1, steps[index - 1], resolve),
+                    onNext.bind(scope, len, steps[len], resolve),
+                    step,
+                    scope.options);
             });
             
-            // Create handler for the next step creation
-            const next = _createStep.bind(scope, index + 1, steps, resolve, scope);
-
-            // When the promise is resolved go to next step
+            // When the promise is resolved go to next step, the index of the next step is "r"
             deferred.then((r) => {
                 const handler = function() {
                     tip.removeEventListener("transitionend", handler);
                     pulse.parentNode.removeChild(pulse);
                     tip.parentNode.removeChild(tip);
                     deferred = null;
-                    next(r);
+                    _createStep.apply(scope, [typeof(r) === "number" ? r : (index + 1), steps, resolve, scope]);
                 };
 
                 // It's based on the fact that the tip is displayed using transition

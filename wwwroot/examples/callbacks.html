@@ -66,6 +66,7 @@
                 html: "Now we will do some async stuff. The next step<br>will be invoked after the job is done.",
                 position: "right",
                 onNext: function(index, step, resolve) {
+                    debugger;
                     $(step.target).html("loading...");
                     setTimeout(function() {
                         $(step.target).html("...done");

@@ -3,6 +3,7 @@
  * Copyright 2025 martinsutka
  */
 body {
+    --tutorial-font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
     --tutorial-surface: rgba(255, 255, 255, .001);
     --tutorial-pulse: #ff5722;
     --tutorial-pulse-border-width: 2px;
@@ -173,27 +174,38 @@ body {
     }
 
     &__navigator {
-        height: 2rem;
-        width: 2rem;
-        font-family: initial;
+        font-family: var(--tutorial-font);
+        font-size: 13px;
+        font-weight: 600;
+        height: 24px;
+        min-width: 24px;
         border: none;
-        padding: 0;
+        padding: 0 8px 0 4px;
         text-decoration: none;
+        text-transform: uppercase;
         background: transparent;
         color: inherit;
         cursor: pointer;
         -webkit-appearance: none;
         -moz-appearance: none;   
         display: flex;
-        flex-direction: column;
-        justify-content: center;   
+        flex-direction: row;
         align-items: center; 
-        opacity: .5;
         transition: all 0.3s ease;
 
         svg {
-            width:1.2em;
-            height:1.2em;
+            transition: inherit;
+            opacity: .75;
+            width: 18px;
+            height: 18px;
+            margin-right: 4px;
+        }
+
+        span {
+            transition: inherit;
+            opacity: .5;
+            position: relative;
+            top: -1px;
         }
 
         &:active,
@@ -202,7 +214,14 @@ body {
         }
 
         &:hover {
-            opacity: 1;
+            svg,
+            span {
+                opacity: 1;
+            }
+        }
+
+        &--hidden {
+            display: none;
         }
     }
 }
