@@ -192,7 +192,7 @@
         }
 
         // Show the tip on the screen, just after a little while
-        setTimeout(() => _addClass(el, `${name}__tip--visible`), 20);
+        setTimeout(() => _addClass(el, `${name}__tip--visible`), 100);
 
         return el;
     }
@@ -216,8 +216,8 @@
             if (current === lastPosition) {
                 sameCount++;
                 
-                if (sameCount > 10) {
-                    setTimeout(() => callback(), 10);
+                if (sameCount > 7) {
+                    setTimeout(() => callback(), 200);
                     return;
                 }
             } 
@@ -266,7 +266,7 @@
         const onNext = step.onNext || function(nextIndex, nextStep, r) { r(); };
 
         _scrollToElement(target, () => {
-            console.debug("tutorial.js : Target was scrolled into the view %o", target);
+            console.debug("tutorial.js : Target has been scrolled into the view %o", target);
             // Create pulse element
             const pulse = _createPulse(target, scope.container);
 
