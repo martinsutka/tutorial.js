@@ -217,7 +217,7 @@
                 sameCount++;
                 
                 if (sameCount > 7) {
-                    setTimeout(() => callback(), 200);
+                    setTimeout(() => callback(), 300);
                     return;
                 }
             } 
