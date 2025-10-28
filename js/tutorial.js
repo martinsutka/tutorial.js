@@ -393,7 +393,10 @@
     const Tutorial = function(steps, options) {
         this.steps = steps || [];
         this.options = options || {};
-        this.scrollContainer = (this.options.scrollContainer ? doc.querySelector(this.options.scrollContainer) : global) || global;
+        this.scrollContainer =
+            typeof(this.options.scrollContainer) === "function" ? this.options.scrollContainer() :
+            typeof(this.options.scrollContainer) === "string"  ? doc.querySelector(this.options.scrollContainer) :
+            global;
         this.container = null;
         this.promise = null;
 
