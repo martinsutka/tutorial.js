@@ -393,6 +393,7 @@
     const Tutorial = function(steps, options) {
         this.steps = steps || [];
         this.options = options || {};
+        this.scrollContainer = (this.options.scrollContainer ? doc.querySelector(this.options.scrollContainer) : global) || global;
         this.container = null;
         this.promise = null;
 
@@ -437,16 +438,16 @@
             this._onTipScrollHandler = _onTipScroll.bind(this);
 
             doc.addEventListener("keydown", this._onEscapeHandler);
-            global.addEventListener("scroll", this._onPulseScrollHandler);
-            global.addEventListener("scroll", this._onTipScrollHandler);
+            this.scrollContainer.addEventListener("scroll", this._onPulseScrollHandler);
+            this.scrollContainer.addEventListener("scroll", this._onTipScrollHandler);
             _createStep(0, this.steps, resolve, this);
         });
 
         // Clean things when the tutorial ends
         this.promise.then(() => {
             doc.removeEventListener("keydown", this._onEscapeHandler);
-            global.removeEventListener("scroll", this._onPulseScrollHandler);
-            global.removeEventListener("scroll", this._onTipScrollHandler);
+            this.scrollContainer.removeEventListener("scroll", this._onPulseScrollHandler);
+            this.scrollContainer.removeEventListener("scroll", this._onTipScrollHandler);
             doc.body.removeChild(this.container);
         });
 
