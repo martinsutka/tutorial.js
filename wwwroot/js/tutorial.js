@@ -206,7 +206,7 @@
      */
     function _scrollToElement(element, callback) {
         console.debug("tutorial.js : Scrolling to element %o", element);
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
+        element.scrollIntoView({ behavior: "instant", block: "center" });
 
         let lastPosition = window.scrollY;
         let sameCount = 0;
@@ -217,7 +217,7 @@
                 sameCount++;
                 
                 if (sameCount > 7) {
-                    setTimeout(() => callback(), 300);
+                    setTimeout(() => callback(), 100);
                     return;
                 }
             } 
