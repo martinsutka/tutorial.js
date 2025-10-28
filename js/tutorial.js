@@ -112,14 +112,16 @@
      * 
      * @param {HTMLElement} target Target html element.
      * @param {HTMLElement} container Tutorial container element.
+     * @param {object} step Current step.
      * @returns {HTMLElement} Pulse element.
      */
-    function _createPulse(target, container) {
+    function _createPulse(target, container, step) {
         const pos = _getPosition(target);
         
         // Create element
         const el = doc.createElement("div");
         el.className = `${name}__pulse`;
+        el.setAttribute("data-tutorial-target", step.target);
         el.innerHTML = "<div></div><div></div><div></div><div></div>";
 
         // Set it's style
@@ -143,15 +145,18 @@
      * @param {number} index Index of the current step.
      * @param {number} length Number of steps.
      * @param {function} callback Callback which initialised.
+     * @param {object} step Current step.
      * @returns {HTMLElement} Pulse element.
      */    
-    function _createTip(target, container, html, position, index, length, callback) {
+    function _createTip(target, container, html, position, index, length, callback, step) {
         console.debug("tutorial.js : Creating tip for the step %d", index);
         const pos = _getPosition(target);
 
         // Create element
         const el = doc.createElement("div");
         el.className = `${name}__tip`;
+        el.setAttribute("data-tutorial-target", step.target);
+        el.setAttribute("data-tutorial-position", position);
         el.innerHTML = `<div class="${name}__tip-container">
                             ${html}
                             <div class="${name}__footer">
@@ -268,12 +273,12 @@
         _scrollToElement(target, () => {
             console.debug("tutorial.js : Target has been scrolled into the view %o", target);
             // Create pulse element
-            const pulse = _createPulse(target, scope.container);
+            const pulse = _createPulse(target, scope.container, step);
 
             // Create tip an its promise
             let tip;
             let deferred = new Promise((resolve) => {
-                tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, index + 1, steps[index + 1], resolve));
+                tip = _createTip(target, scope.container, html, position, index, len, onNext.bind(scope, index + 1, steps[index + 1], resolve), step);
             });
             
             // Create handler for the next step creation
@@ -318,6 +323,62 @@
         return true;
     }
 
+
+    /**
+     * Handles the window scroll event and fixes the position of the tutorial pulse.
+     */
+    function _onPulseScroll() {
+        const pulse = doc.querySelector(".tutorial__pulse[data-tutorial-target]");
+        if (!pulse) {
+            return;
+        }
+        const target = doc.querySelector(pulse.getAttribute("data-tutorial-target"));
+        if (!target) {
+            return;
+        }
+
+        const pos = _getPosition(target);
+        pulse.style.width = `${pos.w}px`;
+        pulse.style.height = `${pos.h}px`;
+        pulse.style.top = `${pos.t}px`;
+        pulse.style.left = `${pos.l}px`;
+    }
+
+
+    /**
+     * Handles the window scroll event and fixes the position of the tutorial tip.
+     */
+    function _onTipScroll() {
+        const tip = doc.querySelector(".tutorial__tip[data-tutorial-target]");
+        if (!tip) {
+            return;
+        }
+        const target = doc.querySelector(tip.getAttribute("data-tutorial-target"));
+        if (!target) {
+            return;
+        }
+
+        const pos = _getPosition(target);
+        switch (tip.getAttribute("data-tutorial-position")) {
+            case "top":
+                tip.style.top = `${(pos.t - _getHeight(tip))}px`;
+                tip.style.left = `${(pos.l + (pos.w / 2))}px`;
+                break;
+            case "right":
+                tip.style.top = `${pos.t + (pos.h / 2)}px`;
+                tip.style.left = `${(pos.l + pos.w)}px`;
+                break;
+            case "bottom":
+                tip.style.top = `${(pos.t + pos.h)}px`;
+                tip.style.left = `${pos.l + (pos.w / 2)}px`;
+                break;
+            case "left":
+                tip.style.top = `${pos.t + (pos.h / 2)}px`;
+                tip.style.left = `${(pos.l - _getWidth(tip))}px`;
+                break;
+        }
+    }
+
     //#endregion
 
 
@@ -336,6 +397,8 @@
         this.promise = null;
 
         this._onEscapeHandler = null;
+        this._onPulseScrollHandler = null;
+        this._onTipScrollHandler = null;
         
         if(!Array.isArray(this.steps) || (this.steps.length <= 0)) {
             console.error("Tutorial() : Unable to create empty tutorial.");
@@ -358,11 +421,11 @@
         this.container = _createContainer();
 
         // Disable events
-        this.container.addEventListener("wheel", e => e.preventDefault(), { passive: false });
-        this.container.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
-        this.container.addEventListener("mousedown", e => e.preventDefault());
-        this.container.addEventListener("mouseup", e => e.preventDefault());
-        this.container.addEventListener("click", e => e.preventDefault());
+        // this.container.addEventListener("wheel", e => e.preventDefault(), { passive: false });
+        // this.container.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+        // this.container.addEventListener("mousedown", e => e.preventDefault());
+        // this.container.addEventListener("mouseup", e => e.preventDefault());
+        // this.container.addEventListener("click", e => e.preventDefault());
 
         // Disable keyboard events
         //document.body.style.overflow = 'hidden';
@@ -370,13 +433,20 @@
         // Create main promise
         this.promise = new Promise((resolve) => {
             this._onEscapeHandler = _onEscape.bind(this, resolve);
+            this._onPulseScrollHandler = _onPulseScroll.bind(this);
+            this._onTipScrollHandler = _onTipScroll.bind(this);
+
             doc.addEventListener("keydown", this._onEscapeHandler);
+            global.addEventListener("scroll", this._onPulseScrollHandler);
+            global.addEventListener("scroll", this._onTipScrollHandler);
             _createStep(0, this.steps, resolve, this);
         });
 
         // Clean things when the tutorial ends
         this.promise.then(() => {
             doc.removeEventListener("keydown", this._onEscapeHandler);
+            global.removeEventListener("scroll", this._onPulseScrollHandler);
+            global.removeEventListener("scroll", this._onTipScrollHandler);
             doc.body.removeChild(this.container);
         });
 
